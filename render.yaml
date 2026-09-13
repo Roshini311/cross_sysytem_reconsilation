@@ -1,0 +1,9 @@
+services:
+  - type: web
+    name: cross-system-reconciliation-backend
+    env: python
+    buildCommand: "cd backend && pip install -r requirements.txt && python manage.py migrate && python manage.py import_data"
+    startCommand: "cd backend && python manage.py runserver 0.0.0.0:$PORT"
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.13.5
