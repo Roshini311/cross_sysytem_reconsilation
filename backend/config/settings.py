@@ -10,10 +10,12 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/6.1/ref/settings/
 """
 
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
 
 
 # Quick-start development settings - unsuitable for production
@@ -80,12 +82,21 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/6.1/ref/settings/#databases
 
+import tempfile
+
+# Writable database location for cloud environments (Vercel, Render)
+if os.environ.get('VERCEL') or os.environ.get('RENDER') or not os.access(BASE_DIR, os.W_OK):
+    DB_PATH = Path(tempfile.gettempdir()) / 'db.sqlite3'
+else:
+    DB_PATH = BASE_DIR / 'db.sqlite3'
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'NAME': DB_PATH,
     }
 }
+
 
 
 # Password validation
