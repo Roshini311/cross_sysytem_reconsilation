@@ -112,40 +112,41 @@ def reconcile_records(
             continue
 
         # PASS 4: VALUE MISMATCH (1-to-1 match within same tenant)
-        if len(a_list) == 1 and len(b_list) == 1:
-            a = a_list[0]
-            b = b_list[0]
-            loc_id = get_attr(a, 'location_id')
+        if len(a_list) >= 1 and len(b_list) == 1:
+            for a in a_list:
+                b = b_list[0]
+                loc_id = get_attr(a, 'location_id')
 
-            a_dec = get_attr(a, 'normalized_value')
-            b_dec = get_attr(b, 'normalized_value')
-            raw_a = get_attr(a, 'raw_value')
-            raw_b = get_attr(b, 'raw_value')
+                a_dec = get_attr(a, 'normalized_value')
+                b_dec = get_attr(b, 'normalized_value')
+                raw_a = get_attr(a, 'raw_value')
+                raw_b = get_attr(b, 'raw_value')
 
-            # Parse Decimal if not already populated on dictionary objects
-            if a_dec is None and raw_a != "":
-                a_dec, _ = normalize_decimal(raw_a)
-            if b_dec is None and raw_b != "":
-                b_dec, _ = normalize_decimal(raw_b)
+                # Parse Decimal if not already populated on dictionary objects
+                if a_dec is None and raw_a != "":
+                    a_dec, _ = normalize_decimal(raw_a)
+                if b_dec is None and raw_b != "":
+                    b_dec, _ = normalize_decimal(raw_b)
 
-            is_mismatch = False
+                is_mismatch = False
 
-            if a_dec is not None and b_dec is not None:
-                if a_dec != b_dec:
-                    is_mismatch = True
-            else:
-                # Fallback to string comparison if one or both cannot be parsed to Decimal
-                if raw_a.strip() != raw_b.strip():
-                    is_mismatch = True
+                if a_dec is not None and b_dec is not None:
+                    if a_dec != b_dec:
+                        is_mismatch = True
+                else:
+                    # Fallback to string comparison if one or both cannot be parsed to Decimal
+                    if raw_a.strip() != raw_b.strip():
+                        is_mismatch = True
 
-            if is_mismatch:
-                discrepancies.append({
-                    "record_id": get_attr(a, 'record_id'),
-                    "location_id": loc_id,
-                    "org_id": org_id,
-                    "reason": "VALUE_MISMATCH",
-                    "system_a_value": raw_a,
-                    "system_b_value": raw_b,
-                })
+                if is_mismatch:
+                    discrepancies.append({
+                        "record_id": get_attr(a, 'record_id'),
+                        "location_id": loc_id,
+                        "org_id": org_id,
+                        "reason": "VALUE_MISMATCH",
+                        "system_a_value": raw_a,
+                        "system_b_value": raw_b,
+                    })
 
     return discrepancies
+
