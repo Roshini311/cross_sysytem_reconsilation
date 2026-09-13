@@ -1,0 +1,14 @@
+# Python / Django
+*.pyc
+__pycache__/
+*.sqlite3
+*.db
+backend/db.sqlite3
+.pytest_cache/
+*.egg-info/
+
+# Node / React
+frontend/node_modules/
+frontend/dist/
+.ds_store
+*.log

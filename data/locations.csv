@@ -1,0 +1,6 @@
+location_id,org_id,location_name
+LOC_101,ORG_ALPHA,North Region Warehouse
+LOC_102,ORG_ALPHA,East Region Hub
+LOC_201,ORG_BETA,West Coast Logistics
+LOC_202,ORG_BETA,South Distribution
+LOC_301,ORG_GAMMA,Central Depot
